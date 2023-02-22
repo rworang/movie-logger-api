@@ -1,1 +1,1 @@
-# Express API
+# Movie Logger Express REST API

@@ -1,6 +1,5 @@
 import { createError } from "../error.js";
 import User from "../models/User.js";
-import Video from "../models/Video.js";
 
 export const update = async (req, res, next) => {
   if (req.params.id === req.user.id) {
@@ -40,54 +39,28 @@ export const getUser = async (req, res, next) => {
     next(err);
   }
 };
-export const subscribe = async (req, res, next) => {
+export const follow = async (req, res, next) => {
   try {
     await User.findByIdAndUpdate(req.user.id, {
-      $addToSet: { subscribedUsers: req.params.id },
+      $addToSet: { followers: req.params.id },
     });
     await User.findByIdAndUpdate(req.params.id, {
-      $addToSet: { subscribers: req.user.id },
+      $addToSet: { following: req.user.id },
     });
-    res.status(200).json("Successfully subscribed");
+    res.status(200).json("Successfully followed");
   } catch (err) {
     next(err);
   }
 };
-export const unsubscribe = async (req, res, next) => {
+export const unfollow = async (req, res, next) => {
   try {
     await User.findByIdAndUpdate(req.user.id, {
-      $pull: { subscribedUsers: req.params.id },
+      $pull: { followers: req.params.id },
     });
     await User.findByIdAndUpdate(req.params.id, {
-      $pull: { subscribers: req.user.id },
+      $pull: { following: req.user.id },
     });
-    res.status(200).json("Successfully unsubscribed");
-  } catch (err) {
-    next(err);
-  }
-};
-export const like = async (req, res, next) => {
-  const id = req.user.id;
-  const videoId = req.params.videoId;
-  try {
-    await Video.findByIdAndUpdate(videoId, {
-      $addToSet: { likes: id },
-      $pull: { dislikes: id },
-    });
-    res.status(200).json("Liked video");
-  } catch (err) {
-    next(err);
-  }
-};
-export const dislike = async (req, res, next) => {
-  const id = req.user.id;
-  const videoId = req.params.videoId;
-  try {
-    await Video.findByIdAndUpdate(videoId, {
-      $addToSet: { dislikes: id },
-      $pull: { likes: id },
-    });
-    res.status(200).json("Disliked video");
+    res.status(200).json("Successfully unfollowed");
   } catch (err) {
     next(err);
   }
