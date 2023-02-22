@@ -1,5 +1,6 @@
 import express from "express";
 import session from "express-session";
+import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import dotenvExpand from "dotenv-expand";
@@ -31,6 +32,14 @@ app.use(
     secret: process.env.JWT,
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO,
+    }),
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+      sameSite: true,
+      secure: process.env.NODE_ENV === "production",
+    },
   })
 );
 app.use(express.json());

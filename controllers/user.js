@@ -2,7 +2,7 @@ import { createError } from "../error.js";
 import User from "../models/User.js";
 
 export const update = async (req, res, next) => {
-  if (req.params.id === req.user.id) {
+  if (req.params.id === req.user.id || req.user.isAdmin) {
     try {
       const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
@@ -20,7 +20,7 @@ export const update = async (req, res, next) => {
   }
 };
 export const deleteUser = async (req, res, next) => {
-  if (req.params.id === req.user.id) {
+  if (req.params.id === req.user.id || req.user.isAdmin) {
     try {
       await User.findByIdAndDelete(req.params.id);
       res.status(200).json("User has been deleted");

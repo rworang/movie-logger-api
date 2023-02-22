@@ -61,34 +61,6 @@ export const login = async (req, res, next) => {
       access_token: accessToken,
       refresh_token: refreshToken,
     });
-    // const user = await User.findOne({ name: req.body.name });
-    // if (!user) return next(createError(404, "User not found"));
-
-    // const isCorrect = await bcrypt.compare(req.body.password, user.password);
-
-    // if (!isCorrect) return next(createError(400, "Wrong credentials"));
-
-    // const accessToken = generateAccessToken(user);
-    // const refreshToken = generateRefreshToken(user);
-
-    // res
-    //   .cookie("access_token", accessToken, {
-    //     httpOnly: true,
-    //   })
-    //   .cookie("refresh_token", refreshToken, {
-    //     httpOnly: true,
-    //   })
-    //   .status(200)
-    //   .json({
-    //     user: {
-    //       _id: user._id,
-    //       name: user.name,
-    //       email: user.email,
-    //       isAdmin: user.isAdmin,
-    //     },
-    //     access_token: accessToken,
-    //     refresh_token: refreshToken,
-    //   });
   } catch (err) {
     next(err);
   }
