@@ -25,4 +25,10 @@ router.put("/follow/:id", verifyToken, follow);
 // unfollow user
 router.put("/unfollow/:id", verifyToken, unfollow);
 
+// get a user list
+router.get("/:id?list=movies");
+
+// get all user lists
+router.get("/:id/lists");
+
 export default router;

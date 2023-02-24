@@ -33,8 +33,24 @@ export const deleteUser = async (req, res, next) => {
 };
 export const getUser = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id);
-    res.status(200).json(user);
+    const user = await User.findById(req.params.id).lean();
+
+    const { name, email, avatar, coverImg, followers, following, isAdmin } =
+      user;
+    const profile = [
+      name,
+      email,
+      avatar,
+      coverImg,
+      followers,
+      following,
+      isAdmin,
+    ];
+
+    const { lists, reviews, ratings, files } = user;
+    const resFormatted = { profile, lists, reviews, ratings, files };
+
+    res.status(200).json(resFormatted);
   } catch (err) {
     next(err);
   }

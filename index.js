@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
@@ -10,6 +11,7 @@ import morgan from "morgan";
 
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
+import searchRoutes from "./routes/search.js";
 
 const app = express();
 const env = dotenv.config();
@@ -29,7 +31,7 @@ const connect = () => {
 
 app.use(
   session({
-    secret: process.env.JWT,
+    secret: process.env.JWT_SECRET,
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
@@ -42,11 +44,17 @@ app.use(
     },
   })
 );
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("dev"));
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/search", searchRoutes);
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;

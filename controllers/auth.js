@@ -4,6 +4,17 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { createError } from "../error.js";
 
+export const logout = (req, res, next) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.clearCookie("access_token");
+    res.clearCookie("refresh_token");
+    res.status(200).json({ message: "Logout successful" });
+  });
+};
+
 export const register = async (req, res, next) => {
   try {
     const salt = bcrypt.genSaltSync(10);
@@ -17,18 +28,13 @@ export const register = async (req, res, next) => {
   }
 };
 
-// Generate a new access token
 const generateAccessToken = (user) => {
-  return jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT, {
-    expiresIn: "5m",
-  });
-};
-
-// Generate a new refresh token
-const generateRefreshToken = (user) => {
   return jwt.sign(
     { id: user._id, isAdmin: user.isAdmin },
-    process.env.JWT_REFRESH
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "5m",
+    }
   );
 };
 
@@ -46,20 +52,15 @@ export const login = async (req, res, next) => {
     }
 
     const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
-
     req.session.accessToken = accessToken;
-    req.session.refreshToken = refreshToken;
 
     res.status(200).json({
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin,
-      },
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      isAdmin: user.isAdmin,
       access_token: accessToken,
-      refresh_token: refreshToken,
     });
   } catch (err) {
     next(err);

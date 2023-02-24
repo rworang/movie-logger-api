@@ -16,9 +16,6 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    img: {
-      type: String,
-    },
     avatar: {
       type: String,
       default: "",
@@ -29,60 +26,7 @@ const UserSchema = new mongoose.Schema(
     },
     lists: {
       type: Array,
-      default: [
-        {
-          watchList: {
-            type: Array,
-            default: [
-              {
-                _id: {
-                  type: String,
-                  unique: true,
-                },
-              },
-            ],
-          },
-        },
-        {
-          moviesList: {
-            type: Array,
-            default: [
-              {
-                _id: {
-                  type: String,
-                  unique: true,
-                },
-              },
-            ],
-          },
-        },
-        {
-          showsList: {
-            type: Array,
-            default: [
-              {
-                _id: {
-                  type: String,
-                  unique: true,
-                },
-              },
-            ],
-          },
-        },
-        {
-          animeList: {
-            type: Array,
-            default: [
-              {
-                _id: {
-                  type: String,
-                  unique: true,
-                },
-              },
-            ],
-          },
-        },
-      ],
+      default: [],
     },
     reviews: {
       type: Array,
