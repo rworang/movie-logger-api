@@ -37,7 +37,7 @@ export const getUser = async (req, res, next) => {
 
     const { name, email, avatar, coverImg, followers, following, isAdmin } =
       user;
-    const profile = [
+    const profile = {
       name,
       email,
       avatar,
@@ -45,7 +45,7 @@ export const getUser = async (req, res, next) => {
       followers,
       following,
       isAdmin,
-    ];
+    };
 
     const { lists, reviews, ratings, files } = user;
     const resFormatted = { profile, lists, reviews, ratings, files };
