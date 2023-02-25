@@ -35,11 +35,20 @@ export const getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id).lean();
 
-    const { name, email, avatar, coverImg, followers, following, isAdmin } =
-      user;
+    const {
+      name,
+      email,
+      location,
+      avatar,
+      coverImg,
+      followers,
+      following,
+      isAdmin,
+    } = user;
     const profile = {
       name,
       email,
+      location,
       avatar,
       coverImg,
       followers,
